@@ -3,6 +3,8 @@ package com.enterprise.hrm.bootstrap;
 import com.enterprise.hrm.auth.entity.ERole;
 import com.enterprise.hrm.auth.entity.Role;
 import com.enterprise.hrm.auth.repository.RoleRepository;
+import com.enterprise.hrm.department.entity.Department;
+import com.enterprise.hrm.department.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -24,6 +26,7 @@ import java.util.Arrays;
 public class DataSeeder implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     @Transactional
@@ -38,5 +41,16 @@ public class DataSeeder implements CommandLineRunner {
             }
         });
         log.info("Role seeding completed.");
+
+        log.info("Seeding initial database departments...");
+        if (departmentRepository.count() == 0) {
+            Department dept = new Department();
+            dept.setDeptCode("ENG-001");
+            dept.setName("Engineering");
+            dept.setDescription("Software Engineering and Development");
+            departmentRepository.save(dept);
+            log.info("Created missing department: Engineering");
+        }
+        log.info("Department seeding completed.");
     }
 }
