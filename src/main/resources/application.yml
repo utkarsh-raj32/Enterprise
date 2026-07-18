@@ -1,0 +1,141 @@
+# ============================================================
+# APPLICATION CONFIGURATION — Enterprise HRM System
+# Spring Boot reads this file automatically at startup
+# ============================================================
+
+# ────────────────────────────────────────────────────────────
+# SERVER CONFIGURATION
+# ────────────────────────────────────────────────────────────
+server:
+  port: 8080
+  servlet:
+    context-path: /                          # Root context; all endpoints start from /
+
+# ────────────────────────────────────────────────────────────
+# SPRING DATASOURCE — MySQL 8
+# ────────────────────────────────────────────────────────────
+spring:
+  application:
+    name: enterprise-hrm
+
+  datasource:
+    # jdbc:mysql://<host>:<port>/<database>?<options>
+    # allowPublicKeyRetrieval — required for MySQL 8 RSA key exchange
+    # useSSL=false           — disable SSL for local dev (enable in prod)
+    # serverTimezone         — prevents timezone mismatch issues
+    url: jdbc:mysql://localhost:3306/enterprise_hrm?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # HikariCP — default connection pool in Spring Boot 3
+    # Tuned for development; increase for production
+    hikari:
+      connection-timeout: 20000              # Max ms to wait for connection from pool
+      maximum-pool-size: 10                  # Max simultaneous connections
+      minimum-idle: 5                        # Minimum idle connections to maintain
+      idle-timeout: 300000                   # Max ms a connection can sit idle
+      pool-name: HRM-HikariCP
+
+  # ────────────────────────────────────────────────────────────
+  # JPA / HIBERNATE CONFIGURATION
+  # ────────────────────────────────────────────────────────────
+  jpa:
+    hibernate:
+      # ddl-auto options:
+      #   none        — no schema changes (use in production with Flyway/Liquibase)
+      #   validate    — validates schema matches entities, throws if mismatch
+      #   update      — updates schema without dropping data (dev-safe)
+      #   create      — creates schema on every start (drops existing)
+      #   create-drop — creates on start, drops on stop (tests)
+      ddl-auto: update
+
+    show-sql: true                           # Log generated SQL to console (disable in prod)
+
+    properties:
+      hibernate:
+        # Formats multi-line SQL for readability in logs
+        format_sql: true
+        # Dialect tells Hibernate which SQL dialect to use
+        # Spring Boot 3 auto-detects this, but explicit is better
+        dialect: org.hibernate.dialect.MySQLDialect
+        # Batch inserts for performance (N+1 prevention)
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+        # Generate statistics for performance tuning
+        generate_statistics: false
+
+  # ────────────────────────────────────────────────────────────
+  # JACKSON — JSON serialisation settings
+  # ────────────────────────────────────────────────────────────
+  jackson:
+    # WRITE_DATES_AS_TIMESTAMPS: false → serialize dates as ISO-8601 strings
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false      # Ignore unknown JSON fields (forward compat)
+    # Use snake_case for JSON keys (optional — remove to use camelCase)
+    # property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: NON_NULL    # Do not serialize null fields
+
+# ────────────────────────────────────────────────────────────
+# JWT CONFIGURATION — custom properties read by JwtService
+# ────────────────────────────────────────────────────────────
+application:
+  security:
+    jwt:
+      # Secret key for HS256 HMAC signing — MUST be ≥256 bits (32 chars)
+      # In production: store in environment variable or secrets manager
+      secret-key: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+      # Access token expiry: 15 minutes (in milliseconds)
+      expiration: 900000
+      # Refresh token expiry: 7 days (in milliseconds)
+      refresh-token:
+        expiration: 604800000
+
+# ────────────────────────────────────────────────────────────
+# SWAGGER / OPENAPI CONFIGURATION
+# ────────────────────────────────────────────────────────────
+springdoc:
+  api-docs:
+    path: /api-docs                          # OpenAPI spec JSON endpoint
+  swagger-ui:
+    path: /swagger-ui.html                   # Swagger UI URL
+    operations-sorter: alpha                 # Sort endpoints alphabetically
+    tags-sorter: alpha
+    try-it-out-enabled: true                 # Enable "Try it out" in Swagger UI
+  show-actuator: true                        # Show actuator endpoints in Swagger
+
+# ────────────────────────────────────────────────────────────
+# ACTUATOR — health, info, metrics endpoints
+# ────────────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# ────────────────────────────────────────────────────────────
+# LOGGING — SLF4J backed by Logback (Spring Boot default)
+# ────────────────────────────────────────────────────────────
+logging:
+  level:
+    # Root log level
+    root: INFO
+    # Our application package — DEBUG shows SQL params etc.
+    com.enterprise.hrm: DEBUG
+    # Hibernate SQL parameters (shows actual values in prepared statements)
+    org.hibernate.orm.jdbc.bind: TRACE
+    # Spring Security filter chain logs
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/enterprise-hrm.log            # Log file location

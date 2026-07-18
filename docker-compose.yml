@@ -1,0 +1,156 @@
+# ============================================================
+# DOCKER COMPOSE — Enterprise HRM System
+# ============================================================
+#
+# Docker Compose orchestrates multiple containers as a single
+# application. It handles:
+#   • Service startup order (depends_on)
+#   • Networking between containers
+#   • Volume management (persistent data)
+#   • Environment variable injection
+#
+# Usage:
+#   Start:  docker-compose up -d
+#   Stop:   docker-compose down
+#   Logs:   docker-compose logs -f hrm-app
+#   Rebuild: docker-compose up -d --build
+#
+# Services:
+#   mysql   — MySQL 8 database
+#   hrm-app — Spring Boot application
+
+version: '3.9'
+
+# ─────────────────────────────────────────────────────────────
+# NETWORKS
+# ─────────────────────────────────────────────────────────────
+# Custom bridge network so containers can communicate by name.
+# 'hrm-app' can reach 'mysql' using hostname 'mysql'.
+# WHY custom network? Default bridge doesn't provide DNS resolution.
+networks:
+  hrm-network:
+    driver: bridge
+
+# ─────────────────────────────────────────────────────────────
+# VOLUMES — Persistent storage
+# ─────────────────────────────────────────────────────────────
+# Named volumes persist data even when containers are stopped/removed.
+# WHY named volumes over bind mounts?
+# Named volumes are managed by Docker and are more portable.
+# Bind mounts depend on the host OS path structure.
+volumes:
+  mysql-data:
+    driver: local
+  app-logs:
+    driver: local
+
+# ─────────────────────────────────────────────────────────────
+# SERVICES
+# ─────────────────────────────────────────────────────────────
+services:
+
+  # ─────────────────────────────────────────────────────────────
+  # MySQL Service
+  # ─────────────────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0                          # Official MySQL 8 image
+    container_name: hrm-mysql
+    restart: unless-stopped                   # Restart on failure, not on explicit stop
+
+    environment:
+      # MYSQL_ROOT_PASSWORD — root user password
+      # MYSQL_DATABASE — creates this database on startup
+      # MYSQL_USER / MYSQL_PASSWORD — creates a regular user
+      # ${VAR:-default} — uses env var or falls back to default
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: enterprise_hrm
+      MYSQL_USER: ${MYSQL_USER:-hrm_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-hrm_password}
+
+    ports:
+      # Expose MySQL on host for external tools (DBeaver, MySQL Workbench)
+      # Format: HOST_PORT:CONTAINER_PORT
+      - "3307:3306"                           # Use 3307 to avoid conflict with local MySQL
+
+    volumes:
+      # Mount named volume to MySQL data directory
+      # Data persists across container restarts
+      - mysql-data:/var/lib/mysql
+
+      # Optional: mount SQL initialization scripts
+      # Files in docker-entrypoint-initdb.d/ run on first startup
+      # - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    networks:
+      - hrm-network
+
+    healthcheck:
+      # Check if MySQL is ready to accept connections
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost",
+             "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s                       # MySQL takes ~30s to fully start
+
+  # ─────────────────────────────────────────────────────────────
+  # Spring Boot Application Service
+  # ─────────────────────────────────────────────────────────────
+  hrm-app:
+    build:
+      context: .                              # Build context = current directory (where Dockerfile is)
+      dockerfile: Dockerfile                  # Dockerfile to use
+
+    container_name: hrm-application
+    restart: unless-stopped
+
+    # Wait for MySQL to be healthy before starting the app
+    # depends_on.condition: service_healthy — waits for healthcheck to pass
+    # WHY? Without this, the app starts before MySQL is ready → connection refused
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    environment:
+      # Override the datasource URL to use 'mysql' (service name) as hostname
+      # Docker's DNS resolves service names to container IPs
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/enterprise_hrm?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-hrm_user}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-hrm_password}
+
+      # Activate the docker Spring profile
+      SPRING_PROFILES_ACTIVE: docker
+
+      # JWT secret from environment variable
+      APPLICATION_SECURITY_JWT_SECRET_KEY: ${JWT_SECRET:-5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}
+
+      # JVM tuning
+      JAVA_OPTS: "-Xms256m -Xmx512m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+
+    ports:
+      # Expose app on host port 8080
+      - "8080:8080"
+
+    volumes:
+      # Persist log files to host
+      - app-logs:/app/logs
+
+    networks:
+      - hrm-network
+
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s                       # Spring Boot startup takes ~30-60s
+
+    # Resource limits (production recommendation)
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 768M
+        reservations:
+          cpus: '0.25'
+          memory: 256M

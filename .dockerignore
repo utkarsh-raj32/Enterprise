@@ -1,0 +1,40 @@
+# Files and directories to exclude from Docker build context
+# The build context is sent to the Docker daemon when building
+# Excluding unnecessary files speeds up builds significantly
+
+# Maven build artifacts
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+
+# Git metadata
+.git/
+.gitignore
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files (never include secrets in image)
+.env
+.env.*
+
+# Documentation (not needed in image)
+*.md
+docs/
+
+# Test files (already skipped via -DskipTests but exclude from context)
+src/test/
+
+# Docker files themselves
+Dockerfile*
+docker-compose*.yml

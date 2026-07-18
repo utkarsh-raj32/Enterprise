@@ -1,0 +1,453 @@
+{
+  "info": {
+    "_postman_id": "enterprise-hrm-v1",
+    "name": "Enterprise HRM System API",
+    "description": "Complete Postman collection for the Enterprise Employee & Leave Management System REST API.\n\nUsage:\n1. Run 'Login' request first\n2. The access token is automatically saved to the {{access_token}} variable\n3. All other requests use this token automatically\n\nVariables:\n- base_url: http://localhost:8080\n- access_token: auto-set after login\n- employee_id: set manually after creating an employee",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080", "type": "string" },
+    { "key": "access_token", "value": "", "type": "string" },
+    { "key": "refresh_token", "value": "", "type": "string" },
+    { "key": "employee_id", "value": "1", "type": "string" },
+    { "key": "department_id", "value": "1", "type": "string" },
+    { "key": "leave_id", "value": "1", "type": "string" },
+    { "key": "attendance_id", "value": "1", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{access_token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/auth/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Admin\",\n  \"lastName\": \"User\",\n  \"email\": \"admin@enterprise.com\",\n  \"password\": \"Admin@123\",\n  \"role\": \"ADMIN\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "  pm.collectionVariables.set('access_token', response.data.accessToken);",
+                  "  pm.collectionVariables.set('refresh_token', response.data.refreshToken);",
+                  "  console.log('✅ Tokens saved to collection variables');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@enterprise.com\",\n  \"password\": \"Admin@123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/auth/refresh-token",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏢 Departments",
+      "item": [
+        {
+          "name": "Create Department",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.success) pm.collectionVariables.set('department_id', r.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/departments",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Engineering\",\n  \"code\": \"ENG\",\n  \"description\": \"Software Engineering Department\",\n  \"managerName\": \"John Manager\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Departments",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/departments" }
+        },
+        {
+          "name": "Get Department By ID",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/departments/{{department_id}}" }
+        },
+        {
+          "name": "Get Active Departments",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/departments?activeOnly=true" }
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/departments/{{department_id}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Engineering & Technology\",\n  \"code\": \"ENGT\",\n  \"description\": \"Updated description\",\n  \"managerName\": \"Jane Manager\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Department",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/departments/{{department_id}}" }
+        },
+        {
+          "name": "Get Department Employees (Paginated)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments/{{department_id}}/employees?page=0&size=10",
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" },
+                { "key": "sortBy", "value": "firstName" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 Employees",
+      "item": [
+        {
+          "name": "Create Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.success) pm.collectionVariables.set('employee_id', r.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/employees",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"empCode\": \"EMP-001\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"email\": \"jane.smith@enterprise.com\",\n  \"phone\": \"+911234567890\",\n  \"designation\": \"Senior Software Engineer\",\n  \"joiningDate\": \"2023-01-15\",\n  \"departmentId\": {{department_id}},\n  \"salary\": 85000.00,\n  \"address\": \"123 Tech Street, Bangalore\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Employees (Paginated)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees?page=0&size=10&sortBy=firstName&sortDir=asc",
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" },
+                { "key": "sortBy", "value": "firstName" },
+                { "key": "sortDir", "value": "asc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Employee By ID",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/employees/{{employee_id}}" }
+        },
+        {
+          "name": "Search Employees",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees/search?query=jane&departmentId={{department_id}}&status=ACTIVE&page=0&size=10",
+              "query": [
+                { "key": "query", "value": "jane" },
+                { "key": "departmentId", "value": "{{department_id}}" },
+                { "key": "status", "value": "ACTIVE" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/employees/{{employee_id}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"empCode\": \"EMP-001\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith-Johnson\",\n  \"email\": \"jane.smith@enterprise.com\",\n  \"phone\": \"+911234567890\",\n  \"designation\": \"Lead Software Engineer\",\n  \"joiningDate\": \"2023-01-15\",\n  \"departmentId\": {{department_id}},\n  \"salary\": 95000.00,\n  \"status\": \"ACTIVE\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Employee (Soft Delete)",
+          "request": { "method": "DELETE", "url": "{{base_url}}/api/v1/employees/{{employee_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "🌴 Leave Management",
+      "item": [
+        {
+          "name": "Get All Leave Types",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/leaves/types" }
+        },
+        {
+          "name": "Create Leave Type",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/leaves/types",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Annual Leave\",\n  \"description\": \"Yearly paid annual leave\",\n  \"maxDaysPerYear\": 21,\n  \"paid\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Initialize Leave Balance",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/v1/leaves/balance/initialize/{{employee_id}}?year=2024",
+              "query": [{ "key": "year", "value": "2024" }]
+            }
+          }
+        },
+        {
+          "name": "Get Leave Balance",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/leaves/balance/{{employee_id}}?year=2024",
+              "query": [{ "key": "year", "value": "2024" }]
+            }
+          }
+        },
+        {
+          "name": "Apply for Leave",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.success) pm.collectionVariables.set('leave_id', r.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/leaves/apply",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": {{employee_id}},\n  \"leaveTypeId\": 1,\n  \"startDate\": \"2024-08-05\",\n  \"endDate\": \"2024-08-07\",\n  \"reason\": \"Family vacation — pre-planned annual leave for family event\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Leaves",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/leaves?page=0&size=10&sortBy=createdAt&sortDir=desc"
+          }
+        },
+        {
+          "name": "Get Leave By ID",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/leaves/{{leave_id}}" }
+        },
+        {
+          "name": "Approve Leave",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/leaves/{{leave_id}}/approve",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"approverNote\": \"Approved. Have a great vacation!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Reject Leave",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/leaves/{{leave_id}}/reject",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"approverNote\": \"Cannot approve — critical project deadline during this period.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Employee Leaves",
+          "request": { "method": "GET", "url": "{{base_url}}/api/v1/leaves/employee/{{employee_id}}?page=0&size=10" }
+        }
+      ]
+    },
+    {
+      "name": "⏰ Attendance",
+      "item": [
+        {
+          "name": "Check In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const r = pm.response.json();",
+                  "if (r.success) pm.collectionVariables.set('attendance_id', r.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/attendance/checkin",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": {{employee_id}},\n  \"notes\": \"On time\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Check Out",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/v1/attendance/checkout/{{attendance_id}}"
+          }
+        },
+        {
+          "name": "Get Today's Attendance",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/attendance/today/{{employee_id}}"
+          }
+        },
+        {
+          "name": "Get Monthly Attendance",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/attendance/monthly?employeeId={{employee_id}}&year=2024&month=7",
+              "query": [
+                { "key": "employeeId", "value": "{{employee_id}}" },
+                { "key": "year", "value": "2024" },
+                { "key": "month", "value": "7" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Monthly Summary",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/attendance/summary?employeeId={{employee_id}}&year=2024&month=7",
+              "query": [
+                { "key": "employeeId", "value": "{{employee_id}}" },
+                { "key": "year", "value": "2024" },
+                { "key": "month", "value": "7" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Salary",
+      "item": [
+        {
+          "name": "Create Salary Structure",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/salary/structure",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": {{employee_id}},\n  \"basicSalary\": 50000.00,\n  \"hra\": 20000.00,\n  \"allowances\": 10000.00,\n  \"deductions\": 5000.00,\n  \"effectiveDate\": \"2024-01-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Current Salary Structure",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/salary/structure/{{employee_id}}"
+          }
+        },
+        {
+          "name": "Generate Payslip",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/v1/salary/payslip/generate",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": {{employee_id}},\n  \"month\": 7,\n  \"year\": 2024\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Employee Payslips",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/salary/payslip/{{employee_id}}"
+          }
+        }
+      ]
+    }
+  ]
+}
