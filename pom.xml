@@ -25,7 +25,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Enterprise Employee & Leave Management System</name>
+    <name>Enterprise Employee &amp; Leave Management System</name>
     <description>
         Production-grade Spring Boot application for managing employees,
         departments, leaves, attendance, and salaries with JWT security.
