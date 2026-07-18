@@ -45,7 +45,7 @@ public class DataSeeder implements CommandLineRunner {
         log.info("Seeding initial database departments...");
         if (departmentRepository.count() == 0) {
             Department dept = new Department();
-            dept.setDeptCode("ENG-001");
+            dept.setCode("ENG-001");
             dept.setName("Engineering");
             dept.setDescription("Software Engineering and Development");
             departmentRepository.save(dept);
