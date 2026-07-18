@@ -30,8 +30,8 @@
 # ─────────────────────────────────────────────────────────────
 
 # Use Eclipse Temurin (OpenJDK distribution by Adoptium) — free, production-grade
-# JDK 21 needed for compilation (includes javac, maven)
-FROM eclipse-temurin:21-jdk-alpine AS builder
+# Use Maven with Eclipse Temurin (JDK 21) for the build stage
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
 
 # Set working directory inside the container
 # All subsequent commands run relative to this path
