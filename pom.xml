@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- =====================================================
-         PARENT — Spring Boot BOM manages all dependency versions
+         PARENT - Spring Boot BOM manages all dependency versions
          so we don't need to specify versions for most Spring libs
          ===================================================== -->
     <parent>
@@ -32,7 +32,7 @@
     </description>
 
     <!-- =====================================================
-         PROPERTIES — Java version, encoding, JWT version, etc.
+         PROPERTIES - Java version, encoding, JWT version, etc.
          ===================================================== -->
     <properties>
         <java.version>21</java.version>
@@ -51,25 +51,25 @@
          ===================================================== -->
     <dependencies>
 
-        <!-- ─────────────────────────────────────────────────
+        <!-- -------------------------------------------------
              SPRING BOOT STARTERS
-             ───────────────────────────────────────────────── -->
+             ------------------------------------------------- -->
 
-        <!-- Spring MVC — provides @RestController, DispatcherServlet,
+        <!-- Spring MVC - provides @RestController, DispatcherServlet,
              HTTP message converters (Jackson for JSON) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Spring Data JPA — includes Hibernate ORM, JpaRepository,
+        <!-- Spring Data JPA - includes Hibernate ORM, JpaRepository,
              transaction management, and entity lifecycle hooks -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Spring Security — AuthenticationManager, UserDetailsService,
+        <!-- Spring Security - AuthenticationManager, UserDetailsService,
              SecurityFilterChain, password encoding -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -83,29 +83,29 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Actuator — /actuator/health, /actuator/metrics etc.
+        <!-- Actuator - /actuator/health, /actuator/metrics etc.
              Useful for Docker health checks and monitoring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- ─────────────────────────────────────────────────
+        <!-- -------------------------------------------------
              DATABASE
-             ───────────────────────────────────────────────── -->
+             ------------------------------------------------- -->
 
-        <!-- PostgreSQL JDBC driver — connects Hibernate/JPA to PostgreSQL -->
+        <!-- PostgreSQL JDBC driver - connects Hibernate/JPA to PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ─────────────────────────────────────────────────
-             JWT — JSON Web Token support
+        <!-- -------------------------------------------------
+             JWT - JSON Web Token support
              Using JJWT (io.jsonwebtoken) which is the most popular
-             Java JWT library — supports HS256, RS256 algorithms
-             ───────────────────────────────────────────────── -->
+             Java JWT library - supports HS256, RS256 algorithms
+             ------------------------------------------------- -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -124,32 +124,32 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ─────────────────────────────────────────────────
+        <!-- -------------------------------------------------
              SWAGGER / OPENAPI
              springdoc-openapi integrates with Spring MVC and generates
              OpenAPI 3 spec + Swagger UI automatically from annotations
-             ───────────────────────────────────────────────── -->
+             ------------------------------------------------- -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
 
-        <!-- ─────────────────────────────────────────────────
-             LOMBOK — Reduces boilerplate: generates getters, setters,
+        <!-- -------------------------------------------------
+             LOMBOK - Reduces boilerplate: generates getters, setters,
              constructors, builders, toString, equals, hashCode at compile time
-             ───────────────────────────────────────────────── -->
+             ------------------------------------------------- -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- ─────────────────────────────────────────────────
+        <!-- -------------------------------------------------
              TESTING
-             ───────────────────────────────────────────────── -->
+             ------------------------------------------------- -->
 
-        <!-- Spring Boot Test — includes JUnit 5, Mockito, AssertJ,
+        <!-- Spring Boot Test - includes JUnit 5, Mockito, AssertJ,
              Spring TestContext Framework, MockMvc -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -157,7 +157,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Security Test — provides @WithMockUser,
+        <!-- Spring Security Test - provides @WithMockUser,
              SecurityMockMvcRequestPostProcessors etc. -->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -165,7 +165,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- H2 in-memory database — used only in test scope
+        <!-- H2 in-memory database - used only in test scope
              so unit tests don't need a real MySQL instance -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -181,14 +181,14 @@
     <build>
         <plugins>
 
-            <!-- Spring Boot Maven Plugin — creates an executable fat JAR
+            <!-- Spring Boot Maven Plugin - creates an executable fat JAR
                  with all dependencies bundled. Also provides layered JARs
                  for optimised Docker image builds. -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!-- Exclude Lombok from the final JAR — it's compile-time only -->
+                    <!-- Exclude Lombok from the final JAR - it's compile-time only -->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -202,7 +202,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven Compiler Plugin — set to Java 21 with annotation
+            <!-- Maven Compiler Plugin - set to Java 21 with annotation
                  processing enabled for Lombok -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -220,7 +220,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Surefire Plugin — runs JUnit 5 tests during `mvn test` -->
+            <!-- Surefire Plugin - runs JUnit 5 tests during `mvn test` -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
