@@ -5,6 +5,8 @@ import com.enterprise.hrm.auth.entity.Role;
 import com.enterprise.hrm.auth.repository.RoleRepository;
 import com.enterprise.hrm.department.entity.Department;
 import com.enterprise.hrm.department.repository.DepartmentRepository;
+import com.enterprise.hrm.leave.entity.LeaveType;
+import com.enterprise.hrm.leave.repository.LeaveTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -27,6 +29,7 @@ public class DataSeeder implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final DepartmentRepository departmentRepository;
+    private final LeaveTypeRepository leaveTypeRepository;
 
     @Override
     @Transactional
@@ -52,5 +55,25 @@ public class DataSeeder implements CommandLineRunner {
             log.info("Created missing department: Engineering");
         }
         log.info("Department seeding completed.");
+
+        log.info("Seeding initial database leave types...");
+        if (leaveTypeRepository.count() == 0) {
+            LeaveType annual = new LeaveType();
+            annual.setName("Annual Leave");
+            annual.setDescription("Standard paid time off");
+            annual.setMaxDaysPerYear(21);
+            annual.setPaid(true);
+            leaveTypeRepository.save(annual);
+
+            LeaveType sick = new LeaveType();
+            sick.setName("Sick Leave");
+            sick.setDescription("Paid leave for medical reasons");
+            sick.setMaxDaysPerYear(14);
+            sick.setPaid(true);
+            leaveTypeRepository.save(sick);
+            
+            log.info("Created missing leave types: Annual Leave, Sick Leave");
+        }
+        log.info("Leave types seeding completed.");
     }
 }
