@@ -19,14 +19,11 @@ spring:
     name: enterprise-hrm
 
   datasource:
-    # jdbc:mysql://<host>:<port>/<database>?<options>
-    # allowPublicKeyRetrieval — required for MySQL 8 RSA key exchange
-    # useSSL=false           — disable SSL for local dev (enable in prod)
-    # serverTimezone         — prevents timezone mismatch issues
-    url: jdbc:mysql://localhost:3306/enterprise_hrm?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    # jdbc:postgresql://<host>:<port>/<database>?<options>
+    url: jdbc:postgresql://localhost:5432/enterprise_hrm
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
     # HikariCP — default connection pool in Spring Boot 3
     # Tuned for development; increase for production
@@ -58,7 +55,7 @@ spring:
         format_sql: true
         # Dialect tells Hibernate which SQL dialect to use
         # Spring Boot 3 auto-detects this, but explicit is better
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         # Batch inserts for performance (N+1 prevention)
         jdbc:
           batch_size: 20
