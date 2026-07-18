@@ -1,454 +1,636 @@
-# Enterprise Employee & Leave Management System (EHR System)
+<div align="center">
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=java" alt="Java 21"/>
-  <img src="https://img.shields.io/badge/Spring_Boot-3.2.5-green?style=for-the-badge&logo=spring" alt="Spring Boot"/>
-  <img src="https://img.shields.io/badge/MySQL-8.0-blue?style=for-the-badge&logo=mysql" alt="MySQL"/>
-  <img src="https://img.shields.io/badge/Docker-enabled-2496ED?style=for-the-badge&logo=docker" alt="Docker"/>
-  <img src="https://img.shields.io/badge/JWT-Auth-purple?style=for-the-badge" alt="JWT"/>
-  <img src="https://img.shields.io/badge/Swagger-OpenAPI_3-85EA2D?style=for-the-badge&logo=swagger" alt="Swagger"/>
-</p>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=200&section=header&text=Enterprise%20HRM%20System&fontSize=48&fontColor=ffffff&fontAlignY=38&desc=Production-Grade%20Spring%20Boot%203.x%20REST%20API&descAlignY=58&descColor=e0e0ff" width="100%"/>
 
-> **Production-grade Spring Boot 3.x REST API** for managing employees, departments, leaves, attendance, and salaries with JWT authentication and Role-Based Access Control (RBAC).
+<br/>
 
----
+[![Java](https://img.shields.io/badge/Java-21-FF6B35?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Security](https://img.shields.io/badge/Spring_Security-6.x-6DB33F?style=for-the-badge&logo=spring-security&logoColor=white)](https://spring.io/projects/spring-security)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI_3-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://swagger.io/)
+[![Maven](https://img.shields.io/badge/Maven-3.9-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)](https://maven.apache.org/)
 
-## 📋 Table of Contents
+<br/>
 
-- [Overview](#-overview)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
-- [Features](#-features)
-- [API Endpoints (40+)](#-api-endpoints-40)
-- [Database Schema](#-database-schema)
-- [Getting Started](#-getting-started)
-- [Docker Deployment](#-docker-deployment)
-- [Running Tests](#-running-tests)
-- [Swagger UI](#-swagger-ui)
-- [Project Structure](#-project-structure)
+[![GitHub stars](https://img.shields.io/github/stars/utkarsh-raj32/Enterprise?style=social)](https://github.com/utkarsh-raj32/Enterprise/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/utkarsh-raj32/Enterprise?style=social)](https://github.com/utkarsh-raj32/Enterprise/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/utkarsh-raj32/Enterprise?style=social)](https://github.com/utkarsh-raj32/Enterprise/issues)
 
----
+<br/>
 
-## 🎯 Overview
+> 🚀 A **full-stack enterprise-grade Human Resource Management REST API** built with Java 21 and Spring Boot 3.x.
+> Covers **42 REST endpoints** across 5 business modules with JWT authentication, RBAC, Docker containerization, and production-ready patterns.
 
-The **Enterprise HRM System** is a full-featured Human Resource Management REST API built with enterprise-grade patterns:
+<br/>
 
-| Feature | Implementation |
-|---|---|
-| Authentication | JWT Access Token + Server-side Refresh Token |
-| Authorization | Spring Security RBAC (ADMIN, HR, EMPLOYEE) |
-| Data Access | Spring Data JPA + Hibernate (MySQL) |
-| API Docs | Swagger / OpenAPI 3 |
-| Containerization | Docker + Docker Compose |
-| Testing | JUnit 5 + Mockito |
-| Error Handling | Global Exception Handler + Custom Exceptions |
-| Response Format | Uniform `ApiResponse<T>` wrapper |
+[🔍 Explore API Docs](#-api-endpoints) · [⚡ Quick Start](#-quick-start) · [🐳 Docker Deploy](#-docker-deployment) · [🧪 Run Tests](#-testing) · [📬 Postman Collection](#-postman-collection)
+
+</div>
 
 ---
 
-## 🛠 Tech Stack
+## 📌 Table of Contents
 
-```
-Java 21               Spring Boot 3.2.5      Spring MVC
-Spring Data JPA        Hibernate ORM          MySQL 8
-Spring Security        JWT (JJWT 0.12.5)     BCrypt (strength=12)
-Lombok                 Swagger/OpenAPI 3      Maven
-Docker                 Docker Compose         JUnit 5 + Mockito
-SLF4J + Logback        Bean Validation        H2 (test)
-```
+- [✨ Features](#-features)
+- [🏗 Architecture](#-architecture)
+- [🛠 Tech Stack](#-tech-stack)
+- [📐 Project Structure](#-project-structure)
+- [🗄 Database Schema](#-database-schema)
+- [🔗 API Endpoints (42+)](#-api-endpoints-42)
+- [⚡ Quick Start](#-quick-start)
+- [🐳 Docker Deployment](#-docker-deployment)
+- [🧪 Testing](#-testing)
+- [📬 Postman Collection](#-postman-collection)
+- [🔐 Security](#-security)
+- [🎯 Design Patterns](#-design-patterns)
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔐 Authentication & Security
+- ✅ JWT Access Token (15 min TTL)
+- ✅ Server-side Refresh Token (7 days)
+- ✅ BCrypt Password Hashing (strength 12)
+- ✅ Role-Based Access Control (RBAC)
+- ✅ Stateless Session Architecture
+- ✅ Spring Security Filter Chain
+
+### 👤 Employee Management
+- ✅ Full CRUD with **Soft Delete**
+- ✅ Pagination, Sorting, Multi-field Search
+- ✅ Employee Code Pattern Validation
+- ✅ Department Mapping (ManyToOne)
+- ✅ Unique Email & Code Enforcement
+
+### 🏢 Department Management
+- ✅ Full CRUD with Soft Delete
+- ✅ Employee Count (Computed Field)
+- ✅ Paginated Employee Listing
+- ✅ Business Rule: Block Delete if has Active Employees
+
+</td>
+<td width="50%">
+
+### 🌴 Leave Management
+- ✅ Configurable Leave Types (Paid/Unpaid)
+- ✅ Per-Employee Per-Year Balance Tracking
+- ✅ **Overlap Detection** (prevents double booking)
+- ✅ **Atomic Approval** (balance + status in 1 transaction)
+- ✅ Balance Restoration on Cancellation
+- ✅ Leave State Machine (PENDING → APPROVED/REJECTED/CANCELLED)
+
+### ⏰ Attendance Tracking
+- ✅ Daily Check-In / Check-Out
+- ✅ **Automatic Work Hours Calculation**
+- ✅ Late Detection (after 9:30 AM)
+- ✅ Half-Day Detection (< 4 hours)
+- ✅ Monthly Reports & Summary Dashboard
+
+### 💰 Salary & Payroll
+- ✅ Salary Structure with Revision History
+- ✅ Auto Net Salary Calculation (@PrePersist)
+- ✅ Payslip Generation with Attendance Integration
+- ✅ Complete Payroll History per Employee
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## 🏗 Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         CLIENT                              │
-│              (Postman / Frontend / Mobile)                  │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ HTTP Request (Bearer JWT)
-┌─────────────────────────▼───────────────────────────────────┐
-│              JwtAuthenticationFilter                        │
-│    Extracts JWT → Validates → Sets SecurityContext         │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────────┐
-│              @RestController Layer                          │
-│  AuthController | EmployeeController | LeaveController     │
-│  DepartmentController | AttendanceController | Salary...    │
-│                                                             │
-│  Responsibilities: Input validation, HTTP mapping,         │
-│  ResponseEntity building, @PreAuthorize RBAC               │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ Calls service methods
-┌─────────────────────────▼───────────────────────────────────┐
-│              Service Interface + Implementation             │
-│  AuthService | EmployeeService | LeaveService | ...        │
-│                                                             │
-│  Responsibilities: Business logic, validation,             │
-│  Entity↔DTO mapping, @Transactional management             │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ Calls repository methods
-┌─────────────────────────▼───────────────────────────────────┐
-│              @Repository Layer (Spring Data JPA)            │
-│  JpaRepository | Custom @Query | Pageable                  │
-│                                                             │
-│  Responsibilities: CRUD, custom queries, pagination        │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ JDBC/Hibernate
-┌─────────────────────────▼───────────────────────────────────┐
-│                    MySQL 8 Database                         │
-│  10 tables | Foreign keys | Indexes | Constraints          │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                        CLIENT LAYER                                   │
+│              Postman  /  Swagger UI  /  Frontend App                  │
+└────────────────────────────┬─────────────────────────────────────────┘
+                             │  HTTP + Bearer JWT
+┌────────────────────────────▼─────────────────────────────────────────┐
+│                  JWT AUTHENTICATION FILTER                            │
+│         Extracts → Validates → Sets SecurityContextHolder            │
+└────────────────────────────┬─────────────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────────────┐
+│                    CONTROLLER LAYER  (@RestController)                │
+│   AuthController  │  EmployeeController  │  DepartmentController    │
+│   LeaveController │  AttendanceController │  SalaryController        │
+│                                                                       │
+│   ➤ Input Validation (@Valid)   ➤ RBAC (@PreAuthorize)              │
+│   ➤ HTTP Mapping                ➤ ResponseEntity Building            │
+└────────────────────────────┬─────────────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────────────┐
+│                    SERVICE LAYER  (@Service)                          │
+│   AuthServiceImpl  │  EmployeeServiceImpl  │  LeaveServiceImpl       │
+│   DeptServiceImpl  │  AttendanceServiceImpl│  SalaryServiceImpl      │
+│                                                                       │
+│   ➤ Business Logic       ➤ @Transactional Management                │
+│   ➤ Entity ↔ DTO Mapping ➤ Exception Throwing                       │
+└────────────────────────────┬─────────────────────────────────────────┘
+                             │
+┌────────────────────────────▼─────────────────────────────────────────┐
+│                  REPOSITORY LAYER  (Spring Data JPA)                  │
+│   JpaRepository  │  Custom @Query (JPQL)  │  Pageable               │
+│   JOIN FETCH (N+1 Prevention)  │  @EntityGraph                       │
+└────────────────────────────┬─────────────────────────────────────────┘
+                             │  Hibernate ORM
+┌────────────────────────────▼─────────────────────────────────────────┐
+│                        MySQL 8 DATABASE                               │
+│         10 Tables  │  Foreign Keys  │  Indexes  │  Constraints       │
+└──────────────────────────────────────────────────────────────────────┘
+
+  Cross-Cutting:  GlobalExceptionHandler │ BaseEntity (Auditing) │ SLF4J Logging
 ```
 
-**Cross-Cutting Concerns:**
-- `GlobalExceptionHandler` → catches all exceptions, returns structured errors
-- `BaseEntity` → audit fields on all entities (createdAt, updatedAt)
-- `ApiResponse<T>` → uniform response envelope
-- SLF4J → structured logging throughout
+### Architecture Principles
+
+| Principle | Implementation |
+|---|---|
+| **Layered Architecture** | Controller → Service → Repository → DB |
+| **Dependency Inversion** | All controllers depend on service *interfaces* |
+| **DTO Pattern** | Entities never exposed to API clients |
+| **Soft Delete** | Status flags preserve historical data |
+| **ACID Transactions** | Approve leave = update status + deduct balance atomically |
+| **N+1 Prevention** | JOIN FETCH in all list queries |
+| **Uniform Response** | `ApiResponse<T>` wraps every response |
+| **Stateless Auth** | JWT carries identity; no server sessions |
 
 ---
 
-## ✨ Features
+## 🛠 Tech Stack
 
-### 🔐 Authentication & Security
-- User registration with BCrypt password hashing (strength=12)
-- JWT login → access token (15 min) + refresh token (7 days, server-side)
-- Token refresh without re-login
-- Logout invalidates refresh token
-- Role-Based Access Control: `ADMIN`, `HR`, `EMPLOYEE`
-- Spring Security filter chain with stateless sessions
+<div align="center">
 
-### 👤 Employee Module
-- Full CRUD with soft delete (TERMINATED status)
-- Pagination, sorting, multi-field search (name, email, designation, dept, status)
-- Department mapping (ManyToOne)
-- Employee code format validation (EMP-001)
-- Unique email and employee code enforcement
+| Layer | Technology |
+|---|---|
+| **Language** | Java 21 (LTS) — Records, Pattern Matching, Virtual Threads-ready |
+| **Framework** | Spring Boot 3.2.5 — Spring MVC, Data JPA, Security |
+| **ORM** | Hibernate 6.x via Spring Data JPA |
+| **Database** | MySQL 8.0 — InnoDB, UTF-8mb4 |
+| **Auth** | Spring Security 6 + JJWT 0.12.5 (HS256 + BCrypt) |
+| **API Docs** | SpringDoc OpenAPI 3 (Swagger UI) |
+| **Build** | Apache Maven 3.9 |
+| **Boilerplate** | Lombok (Builder, @Slf4j, @RequiredArgsConstructor) |
+| **Validation** | Jakarta Bean Validation (Hibernate Validator) |
+| **Testing** | JUnit 5 + Mockito + AssertJ (BDD-style) |
+| **Container** | Docker (multi-stage build) + Docker Compose |
+| **Logging** | SLF4J + Logback |
 
-### 🏢 Department Module
-- Full CRUD with soft delete
-- One-to-Many with employees (bidirectional)
-- Employee count computed field
-- Paginated employee listing per department
-- Business rule: can't delete department with active employees
-
-### 🌴 Leave Module
-- Leave type management (Annual, Sick, Maternity, etc.)
-- Leave application with automatic working day calculation
-- Overlap detection (prevents double booking)
-- Leave balance tracking per employee per year
-- Approve/Reject with atomic balance deduction (one transaction)
-- Balance restoration on approved leave cancellation
-- Leave history with pagination
-
-### ⏰ Attendance Module
-- Daily check-in / check-out
-- Auto work hours calculation
-- Late detection (after 9:30 AM = LATE status)
-- Half-day detection (< 4 hours = HALF_DAY)
-- Monthly attendance report
-- Monthly summary (present/late/absent/leave days count)
-
-### 💰 Salary Module
-- Salary structure with salary revision support
-- Components: Basic + HRA + Allowances - Deductions = Net Salary
-- Auto net salary calculation via @PrePersist
-- Payslip generation with attendance integration
-- Payslip history per employee
+</div>
 
 ---
 
-## 🔗 API Endpoints (40+)
+## 📐 Project Structure
 
-### Authentication
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | `/api/v1/auth/register` | Public | Register new user |
-| POST | `/api/v1/auth/login` | Public | Login, get tokens |
-| POST | `/api/v1/auth/refresh-token` | Public | Refresh access token |
-| POST | `/api/v1/auth/logout` | Authenticated | Logout, invalidate token |
-
-### Departments
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | `/api/v1/departments` | ADMIN,HR | Create department |
-| GET | `/api/v1/departments` | All | Get all departments |
-| GET | `/api/v1/departments/{id}` | All | Get by ID |
-| PUT | `/api/v1/departments/{id}` | ADMIN,HR | Update |
-| DELETE | `/api/v1/departments/{id}` | ADMIN | Soft delete |
-| GET | `/api/v1/departments/{id}/employees` | All | Get dept employees (paginated) |
-
-### Employees
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | `/api/v1/employees` | ADMIN,HR | Create employee |
-| GET | `/api/v1/employees?page=0&size=10&sortBy=firstName` | ADMIN,HR | Paginated list |
-| GET | `/api/v1/employees/{id}` | ADMIN,HR | Get by ID |
-| GET | `/api/v1/employees/code/{empCode}` | ADMIN,HR | Get by code |
-| GET | `/api/v1/employees/search?query=john&departmentId=1&status=ACTIVE` | ADMIN,HR | Search |
-| PUT | `/api/v1/employees/{id}` | ADMIN,HR | Update |
-| DELETE | `/api/v1/employees/{id}` | ADMIN | Soft delete |
-
-### Leave Management
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| GET | `/api/v1/leaves/types` | All | Get leave types |
-| POST | `/api/v1/leaves/types` | ADMIN | Create leave type |
-| POST | `/api/v1/leaves/apply` | All | Apply for leave |
-| GET | `/api/v1/leaves?page=0&size=10` | ADMIN,HR | All leaves |
-| GET | `/api/v1/leaves/{id}` | All | Get by ID |
-| GET | `/api/v1/leaves/employee/{employeeId}` | All | Employee's leaves |
-| PUT | `/api/v1/leaves/{id}/approve` | ADMIN,HR | Approve leave |
-| PUT | `/api/v1/leaves/{id}/reject` | ADMIN,HR | Reject leave |
-| PUT | `/api/v1/leaves/{id}/cancel` | All | Cancel leave |
-| GET | `/api/v1/leaves/balance/{employeeId}?year=2024` | All | Leave balance |
-| POST | `/api/v1/leaves/balance/initialize/{employeeId}` | ADMIN,HR | Init balance |
-
-### Attendance
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | `/api/v1/attendance/checkin` | All | Check in |
-| PUT | `/api/v1/attendance/checkout/{id}` | All | Check out |
-| GET | `/api/v1/attendance/today/{employeeId}` | All | Today's record |
-| GET | `/api/v1/attendance/{id}` | ADMIN,HR | By ID |
-| GET | `/api/v1/attendance/employee/{employeeId}` | All | History (paginated) |
-| GET | `/api/v1/attendance/monthly?employeeId=1&year=2024&month=7` | All | Monthly |
-| GET | `/api/v1/attendance/summary?employeeId=1&year=2024&month=7` | All | Monthly summary |
-
-### Salary
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | `/api/v1/salary/structure` | ADMIN | Create salary structure |
-| GET | `/api/v1/salary/structure/{employeeId}` | ADMIN | Current structure |
-| GET | `/api/v1/salary/structure/{employeeId}/history` | ADMIN | Salary history |
-| PUT | `/api/v1/salary/structure/{id}` | ADMIN | Update structure |
-| POST | `/api/v1/salary/payslip/generate` | ADMIN | Generate payslip |
-| GET | `/api/v1/salary/payslip/{employeeId}` | ADMIN | Employee payslips |
-| GET | `/api/v1/salary/payslip/detail/{id}` | ADMIN | Payslip by ID |
+```
+enterprise-hrm/
+│
+├── 📄 pom.xml                          # Maven dependencies
+├── 🐳 Dockerfile                       # Multi-stage JDK→JRE build
+├── 🐳 docker-compose.yml              # MySQL + App orchestration
+├── 📋 README.md
+│
+├── src/main/java/com/enterprise/hrm/
+│   │
+│   ├── 🚀 EhrApplication.java          # @SpringBootApplication entry point
+│   │
+│   ├── common/                         # Shared utilities
+│   │   ├── ApiResponse.java            # Generic response wrapper ApiResponse<T>
+│   │   ├── PageResponse.java           # Pagination response
+│   │   └── BaseEntity.java            # @MappedSuperclass with audit fields
+│   │
+│   ├── config/                         # Configuration classes
+│   │   ├── SecurityConfig.java         # Spring Security filter chain
+│   │   └── SwaggerConfig.java          # OpenAPI + JWT bearer config
+│   │
+│   ├── exception/                      # Exception handling
+│   │   ├── GlobalExceptionHandler.java # @RestControllerAdvice
+│   │   ├── ResourceNotFoundException   # 404
+│   │   ├── BusinessException           # 400 business rule violation
+│   │   ├── DuplicateResourceException  # 409 Conflict
+│   │   └── UnauthorizedException       # 401
+│   │
+│   ├── security/                       # JWT security
+│   │   ├── JwtService.java             # Token generation & validation
+│   │   ├── JwtAuthenticationFilter.java# OncePerRequestFilter
+│   │   └── UserDetailsServiceImpl.java # Spring Security integration
+│   │
+│   ├── auth/                           # 🔐 Authentication module
+│   │   ├── controller/AuthController
+│   │   ├── dto/                        # LoginRequest, RegisterRequest, AuthResponse
+│   │   ├── entity/                     # User, Role, RefreshToken
+│   │   ├── repository/
+│   │   └── service/                    # AuthService + RefreshTokenService
+│   │
+│   ├── department/                     # 🏢 Department module
+│   ├── employee/                       # 👤 Employee module
+│   ├── leave/                          # 🌴 Leave module
+│   ├── attendance/                     # ⏰ Attendance module
+│   └── salary/                         # 💰 Salary module
+│
+├── src/main/resources/
+│   ├── application.yml                 # Main configuration
+│   └── application-docker.yml         # Docker profile overrides
+│
+├── src/test/java/
+│   ├── auth/AuthServiceTest.java       # 3 unit tests
+│   ├── employee/EmployeeServiceTest.java # 5 unit tests
+│   └── leave/LeaveServiceTest.java    # 5 unit tests
+│
+└── docs/
+    └── Enterprise-HRM-Postman-Collection.json
+```
 
 ---
 
 ## 🗄 Database Schema
 
 ```
-roles                   users                    refresh_tokens
-────────────            ────────────             ──────────────
-id (PK)                 id (PK)                  id (PK)
-name (ENUM)             first_name               token (UNIQUE)
-                        last_name                user_id (FK→users)
-                        email (UNIQUE)           expiry_date
-                        password
-                        role_id (FK→roles)
-                        enabled
-
-departments             employees
-───────────             ─────────
-id (PK)                 id (PK)
-name                    emp_code (UNIQUE)
-code (UNIQUE)           first_name, last_name
-description             email (UNIQUE)
-manager_name            phone, designation
-active                  joining_date
-                        status (ENUM)
-                        department_id (FK→departments)
-                        user_id (FK→users)
-                        salary
-
-leave_types             leave_balances           leave_requests
-───────────             ──────────────           ──────────────
-id (PK)                 id (PK)                  id (PK)
-name (UNIQUE)           employee_id (FK)         employee_id (FK)
-max_days_per_year       leave_type_id (FK)       leave_type_id (FK)
-paid                    year                     start_date, end_date
-active                  total_days               number_of_days
-                        used_days                reason
-                        remaining_days           status (ENUM)
-                        [UNIQUE: emp+type+year]  approved_by (FK→users)
-
-attendances             salary_structures        payslips
-───────────             ─────────────────        ────────
-id (PK)                 id (PK)                  id (PK)
-employee_id (FK)        employee_id (FK)         employee_id (FK)
-attendance_date         basic_salary             salary_structure_id (FK)
-check_in                hra                      month, year
-check_out               allowances               basic_salary, hra ...
-work_hours              deductions               net_salary
-status (ENUM)           net_salary               working_days, present_days
-[UNIQUE: emp+date]      effective_date           generated_at
+┌─────────────┐       ┌──────────────┐       ┌──────────────────┐
+│    roles    │       │    users     │       │  refresh_tokens  │
+├─────────────┤       ├──────────────┤       ├──────────────────┤
+│ id (PK)     │◄──────│ role_id (FK) │◄──────│ user_id (FK)     │
+│ name        │       │ email (UK)   │       │ token (UK)       │
+└─────────────┘       │ password     │       │ expiry_date      │
+                      └──────┬───────┘       └──────────────────┘
+                             │
+                    ┌────────▼────────┐
+                    │   employees     │
+                    ├─────────────────┤       ┌──────────────────┐
+                    │ id (PK)         │       │   departments    │
+                    │ emp_code (UK)   │       ├──────────────────┤
+                    │ email (UK)      │◄──────│ id (PK)          │
+                    │ status (ENUM)   │       │ code (UK)        │
+                    │ department_id   │       │ active           │
+                    └────────┬────────┘       └──────────────────┘
+                             │
+          ┌──────────────────┼──────────────────┐
+          │                  │                  │
+┌─────────▼──────┐  ┌────────▼───────┐  ┌──────▼──────────┐
+│ leave_requests │  │  attendances   │  │salary_structures│
+├────────────────┤  ├────────────────┤  ├─────────────────┤
+│ start_date     │  │ attendance_date│  │ basic_salary    │
+│ end_date       │  │ check_in       │  │ hra, allowances │
+│ status (ENUM)  │  │ check_out      │  │ net_salary      │
+│ approved_by FK │  │ work_hours     │  │ effective_date  │
+└────────────────┘  └────────────────┘  └────────┬────────┘
+                                                  │
+┌──────────────────┐  ┌─────────────────┐  ┌─────▼───────┐
+│ leave_balances   │  │   leave_types   │  │  payslips   │
+├──────────────────┤  ├─────────────────┤  ├─────────────┤
+│ employee_id (FK) │  │ name (UK)       │  │ month, year │
+│ leave_type_id FK │  │ max_days_year   │  │ net_salary  │
+│ year, used_days  │  │ paid (bool)     │  │ present_days│
+│ remaining_days   │  └─────────────────┘  └─────────────┘
+└──────────────────┘
 ```
+
+**10 Tables** · **20+ Foreign Key Constraints** · **12 Unique Indexes**
 
 ---
 
-## 🚀 Getting Started
+## 🔗 API Endpoints (42+)
 
-### Prerequisites
-- Java 21+
-- Maven 3.9+
-- MySQL 8+
-- Docker & Docker Compose (optional)
+<details>
+<summary><b>🔐 Authentication (4 endpoints)</b></summary>
 
-### Local Setup
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/auth/register` | Public | Register new user |
+| `POST` | `/api/v1/auth/login` | Public | Login → get JWT tokens |
+| `POST` | `/api/v1/auth/refresh-token` | Public | Refresh access token |
+| `POST` | `/api/v1/auth/logout` | Bearer | Logout, invalidate refresh token |
+
+</details>
+
+<details>
+<summary><b>🏢 Departments (6 endpoints)</b></summary>
+
+| Method | Endpoint | Role | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/departments` | ADMIN, HR | Create department |
+| `GET` | `/api/v1/departments` | All | Get all (filter: `?activeOnly=true`) |
+| `GET` | `/api/v1/departments/{id}` | All | Get by ID |
+| `PUT` | `/api/v1/departments/{id}` | ADMIN, HR | Update department |
+| `DELETE` | `/api/v1/departments/{id}` | ADMIN | Soft delete |
+| `GET` | `/api/v1/departments/{id}/employees` | All | Paginated employees |
+
+</details>
+
+<details>
+<summary><b>👤 Employees (7 endpoints)</b></summary>
+
+| Method | Endpoint | Role | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/employees` | ADMIN, HR | Create employee |
+| `GET` | `/api/v1/employees` | ADMIN, HR | Paginated list with sort |
+| `GET` | `/api/v1/employees/{id}` | ADMIN, HR | Get by ID |
+| `GET` | `/api/v1/employees/code/{empCode}` | ADMIN, HR | Get by employee code |
+| `GET` | `/api/v1/employees/search` | ADMIN, HR | Search (query, dept, status) |
+| `PUT` | `/api/v1/employees/{id}` | ADMIN, HR | Update employee |
+| `DELETE` | `/api/v1/employees/{id}` | ADMIN | Soft delete (→ TERMINATED) |
+
+</details>
+
+<details>
+<summary><b>🌴 Leave Management (11 endpoints)</b></summary>
+
+| Method | Endpoint | Role | Description |
+|---|---|---|---|
+| `GET` | `/api/v1/leaves/types` | All | Get all leave types |
+| `POST` | `/api/v1/leaves/types` | ADMIN | Create leave type |
+| `POST` | `/api/v1/leaves/apply` | All | Apply for leave |
+| `GET` | `/api/v1/leaves` | ADMIN, HR | All leaves (paginated) |
+| `GET` | `/api/v1/leaves/{id}` | All | Get leave by ID |
+| `GET` | `/api/v1/leaves/employee/{id}` | All | Employee's leave history |
+| `PUT` | `/api/v1/leaves/{id}/approve` | ADMIN, HR | ✅ Approve leave |
+| `PUT` | `/api/v1/leaves/{id}/reject` | ADMIN, HR | ❌ Reject leave |
+| `PUT` | `/api/v1/leaves/{id}/cancel` | All | 🚫 Cancel leave |
+| `GET` | `/api/v1/leaves/balance/{empId}` | All | Get leave balance |
+| `POST` | `/api/v1/leaves/balance/initialize/{id}` | ADMIN, HR | Init yearly balance |
+
+</details>
+
+<details>
+<summary><b>⏰ Attendance (7 endpoints)</b></summary>
+
+| Method | Endpoint | Role | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/attendance/checkin` | All | Employee check-in |
+| `PUT` | `/api/v1/attendance/checkout/{id}` | All | Employee check-out |
+| `GET` | `/api/v1/attendance/today/{empId}` | All | Today's record |
+| `GET` | `/api/v1/attendance/{id}` | ADMIN, HR | Get by ID |
+| `GET` | `/api/v1/attendance/employee/{id}` | All | History (paginated) |
+| `GET` | `/api/v1/attendance/monthly` | All | Monthly records |
+| `GET` | `/api/v1/attendance/summary` | All | Monthly summary |
+
+</details>
+
+<details>
+<summary><b>💰 Salary (7 endpoints)</b></summary>
+
+| Method | Endpoint | Role | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/salary/structure` | ADMIN | Create salary structure |
+| `GET` | `/api/v1/salary/structure/{empId}` | ADMIN | Current structure |
+| `GET` | `/api/v1/salary/structure/{empId}/history` | ADMIN | Salary history |
+| `PUT` | `/api/v1/salary/structure/{id}` | ADMIN | Update structure |
+| `POST` | `/api/v1/salary/payslip/generate` | ADMIN | Generate payslip |
+| `GET` | `/api/v1/salary/payslip/{empId}` | ADMIN | All payslips |
+| `GET` | `/api/v1/salary/payslip/detail/{id}` | ADMIN | Payslip by ID |
+
+</details>
+
+---
+
+## ⚡ Quick Start
+
+### 🐳 Option 1 — Docker (Recommended)
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-org/enterprise-hrm.git
-cd enterprise-hrm
+# Clone the repository
+git clone https://github.com/utkarsh-raj32/Enterprise.git
+cd Enterprise
 
-# 2. Create MySQL database
-mysql -u root -p
-CREATE DATABASE enterprise_hrm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-EXIT;
+# Start everything with one command
+docker-compose up -d --build
 
-# 3. Configure database credentials
-# Edit src/main/resources/application.yml:
-#   spring.datasource.username: your_user
-#   spring.datasource.password: your_password
+# View logs
+docker-compose logs -f hrm-app
+```
 
-# 4. Build and run
-mvn clean package -DskipTests
-java -jar target/enterprise-hrm-1.0.0.jar
+| Service | URL |
+|---|---|
+| 🌐 Swagger UI | http://localhost:8080/swagger-ui.html |
+| ❤️ Health Check | http://localhost:8080/actuator/health |
+| 🗄 MySQL | localhost:3307 |
 
-# OR using Maven Spring Boot plugin
+---
+
+### ☕ Option 2 — Local Setup
+
+**Prerequisites:** Java 21+, Maven 3.9+, MySQL 8
+
+```bash
+# 1. Create the database
+mysql -u root -p -e "
+  CREATE DATABASE enterprise_hrm CHARACTER SET utf8mb4;
+  CREATE USER 'hrm_user'@'localhost' IDENTIFIED BY 'hrm_password';
+  GRANT ALL PRIVILEGES ON enterprise_hrm.* TO 'hrm_user'@'localhost';
+  FLUSH PRIVILEGES;
+"
+
+# 2. Run the application (tables auto-created by Hibernate)
 mvn spring-boot:run
 ```
 
-The application starts at: `http://localhost:8080`
+### 🔑 First Steps After Starting
+
+```bash
+# Step 1 — Register Admin
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"firstName":"Admin","lastName":"User","email":"admin@hrm.com","password":"Admin@123","role":"ADMIN"}'
+
+# Step 2 — Login & get token
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@hrm.com","password":"Admin@123"}'
+
+# Step 3 — Use token for protected endpoints
+curl -X GET http://localhost:8080/api/v1/employees \
+  -H "Authorization: Bearer <your_access_token>"
+```
 
 ---
 
 ## 🐳 Docker Deployment
 
+```yaml
+# docker-compose.yml creates:
+#  ✅ MySQL 8 with named volume (data persists)
+#  ✅ Spring Boot app (depends on healthy MySQL)
+#  ✅ Custom bridge network for container communication
+#  ✅ Health checks for both services
+#  ✅ Resource limits (768MB RAM, 1 CPU)
+```
+
 ```bash
-# Build and start all services
-docker-compose up -d --build
-
-# View logs
-docker-compose logs -f hrm-app
-
-# Stop everything
-docker-compose down
-
-# Stop and remove volumes (WARNING: deletes database data)
-docker-compose down -v
+docker-compose up -d --build    # Start
+docker-compose logs -f hrm-app  # Logs
+docker-compose down             # Stop
+docker-compose down -v          # Stop + wipe database
 ```
 
-### Environment Variables
-Create a `.env` file in the project root:
+**Environment variables** (create `.env` file):
 ```env
-MYSQL_ROOT_PASSWORD=your_root_password
+MYSQL_ROOT_PASSWORD=strong_root_password
 MYSQL_USER=hrm_user
-MYSQL_PASSWORD=your_password
-JWT_SECRET=your_64_char_hex_secret_key_here
+MYSQL_PASSWORD=strong_password
+JWT_SECRET=your_64_character_hex_secret_here
 ```
-
-### Service URLs
-| Service | URL |
-|---|---|
-| Application | http://localhost:8080 |
-| Swagger UI | http://localhost:8080/swagger-ui.html |
-| OpenAPI JSON | http://localhost:8080/api-docs |
-| Health Check | http://localhost:8080/actuator/health |
-| MySQL | localhost:3307 |
 
 ---
 
-## 🧪 Running Tests
+## 🧪 Testing
 
 ```bash
-# Run all tests
+# Run all unit tests
 mvn test
 
-# Run specific test class
+# Run specific module tests
 mvn test -Dtest=EmployeeServiceTest
+mvn test -Dtest=LeaveServiceTest
+mvn test -Dtest=AuthServiceTest
 
 # Run with coverage report
 mvn test jacoco:report
-
-# Test output
-./target/surefire-reports/     # JUnit XML reports
-./target/site/jacoco/          # Code coverage HTML report
+# Open: target/site/jacoco/index.html
 ```
 
----
+### Test Coverage
 
-## 📖 Swagger UI
+| Test Class | Tests | Coverage |
+|---|---|---|
+| `AuthServiceTest` | 3 tests | Register, Duplicate Email, Login |
+| `EmployeeServiceTest` | 5 tests | Create, Duplicate, Dept Not Found, Get, Soft Delete |
+| `LeaveServiceTest` | 5 tests | Apply, Date Validation, Balance Check, Overlap, Not Found |
 
-1. Start the application
-2. Navigate to: `http://localhost:8080/swagger-ui.html`
-3. Click **Authorize** (top right)
-4. Call `POST /api/v1/auth/login` to get a JWT token
-5. Enter the token in the Authorize dialog: `Bearer <your-token>`
-6. All endpoints are now accessible
-
----
-
-## 📁 Project Structure
-
-```
-enterprise-hrm/
-├── src/main/java/com/enterprise/hrm/
-│   ├── EhrApplication.java          # Main class
-│   ├── common/                      # Shared utilities
-│   │   ├── ApiResponse.java
-│   │   ├── PageResponse.java
-│   │   └── BaseEntity.java
-│   ├── config/                      # Spring configurations
-│   │   ├── SecurityConfig.java
-│   │   └── SwaggerConfig.java
-│   ├── exception/                   # Custom exceptions + handler
-│   │   ├── GlobalExceptionHandler.java
-│   │   ├── ResourceNotFoundException.java
-│   │   ├── BusinessException.java
-│   │   ├── DuplicateResourceException.java
-│   │   └── UnauthorizedException.java
-│   ├── security/                    # JWT security
-│   │   ├── JwtService.java
-│   │   ├── JwtAuthenticationFilter.java
-│   │   └── UserDetailsServiceImpl.java
-│   ├── auth/                        # Authentication module
-│   │   ├── controller/AuthController.java
-│   │   ├── dto/                     # Request/Response DTOs
-│   │   ├── entity/                  # User, Role, RefreshToken
-│   │   ├── repository/
-│   │   └── service/
-│   ├── department/                  # Department module
-│   ├── employee/                    # Employee module
-│   ├── leave/                       # Leave module
-│   ├── attendance/                  # Attendance module
-│   └── salary/                      # Salary module
-├── src/main/resources/
-│   ├── application.yml
-│   └── application-docker.yml
-├── src/test/java/
-│   ├── auth/AuthServiceTest.java
-│   ├── employee/EmployeeServiceTest.java
-│   └── leave/LeaveServiceTest.java
-├── Dockerfile
-├── docker-compose.yml
-├── .dockerignore
-└── pom.xml
-```
+**Framework:** JUnit 5 + Mockito BDD-style (`given/when/then`) + AssertJ fluent assertions
 
 ---
 
 ## 📬 Postman Collection
 
-Import the collection from `docs/Enterprise-HRM-Postman-Collection.json`.
+Import `docs/Enterprise-HRM-Postman-Collection.json` into Postman.
 
-Pre-configured variables:
-- `base_url` = `http://localhost:8080`
-- `access_token` — auto-set after login
+**Auto-Token Feature:** The Login request automatically saves the JWT to `{{access_token}}` — all other requests use it instantly.
+
+**Collection Variables:**
+
+| Variable | Value | Description |
+|---|---|---|
+| `base_url` | `http://localhost:8080` | API base URL |
+| `access_token` | *auto-set on login* | JWT Bearer token |
+| `refresh_token` | *auto-set on login* | Refresh token |
+| `employee_id` | *auto-set on create* | Last created employee |
+| `department_id` | *auto-set on create* | Last created department |
+
+---
+
+## 🔐 Security
+
+### JWT Token Flow
+
+```
+Client Login Request
+        │
+        ▼
+AuthenticationManager.authenticate()
+        │
+        ▼
+BCryptPasswordEncoder.matches()  ──► Invalid → 401 Unauthorized
+        │ Valid
+        ▼
+JwtService.generateToken()  ──►  Access Token (15 min, HS256)
+        +
+RefreshTokenService.create()  ►  Refresh Token (7 days, DB-stored)
+        │
+        ▼
+AuthResponse { accessToken, refreshToken, tokenType: "Bearer" }
+```
+
+### Role Permissions Matrix
+
+| Endpoint Group | EMPLOYEE | HR | ADMIN |
+|---|---|---|---|
+| Auth (register/login) | ✅ | ✅ | ✅ |
+| View Employees | ❌ | ✅ | ✅ |
+| Create/Edit Employees | ❌ | ✅ | ✅ |
+| Delete Employees | ❌ | ❌ | ✅ |
+| Apply Leave | ✅ | ✅ | ✅ |
+| Approve/Reject Leave | ❌ | ✅ | ✅ |
+| View Attendance | ✅ (own) | ✅ | ✅ |
+| Salary & Payslips | ❌ | ❌ | ✅ |
+
+---
+
+## 🎯 Design Patterns
+
+| Pattern | Where Used |
+|---|---|
+| **Layered Architecture** | Controller → Service → Repository → DB |
+| **DTO Pattern** | All request/response objects separate from entities |
+| **Repository Pattern** | Spring Data JPA interfaces abstract all DB access |
+| **Strategy Pattern** | Service interfaces with swappable implementations |
+| **Factory Method** | `ApiResponse.success()` / `ApiResponse.error()` |
+| **Proxy Pattern** | Spring AOP wraps `@Transactional`, `@PreAuthorize` |
+| **Chain of Responsibility** | Spring Security filter chain |
+| **Singleton** | All Spring beans (default scope) |
+| **Template Method** | `OncePerRequestFilter.doFilterInternal()` |
+| **Observer** | JPA `@PrePersist`, `@PreUpdate` lifecycle hooks |
+
+---
+
+## 📊 Project Stats
+
+<div align="center">
+
+| Metric | Count |
+|---|---|
+| 📁 Total Files | 91 |
+| ☕ Java Source Files | 76 |
+| 🔗 REST Endpoints | 42 |
+| 🗄 Database Tables | 10 |
+| 🧪 Unit Tests | 13 |
+| 📦 Maven Dependencies | 18 |
+| 📝 Lines of Code | 8,372+ |
+
+</div>
+
+---
+
+## 🤝 Contributing
+
+```bash
+# Fork the repository
+# Create your feature branch
+git checkout -b feature/AmazingFeature
+
+# Commit your changes
+git commit -m 'feat: Add AmazingFeature'
+
+# Push to the branch
+git push origin feature/AmazingFeature
+
+# Open a Pull Request
+```
 
 ---
 
 ## 📄 License
 
-Apache License 2.0 — See [LICENSE](LICENSE) file.
+Distributed under the **Apache License 2.0**. See [`LICENSE`](LICENSE) for more information.
 
 ---
 
-## 👨‍💻 Author
+<div align="center">
 
-Built as an enterprise-grade, interview-ready Spring Boot project demonstrating production patterns including layered architecture, JWT security, JPA relationships, pagination, global exception handling, and Docker containerization.
+### ⭐ If this project helped you, give it a star!
+
+**Built with ❤️ using Spring Boot 3.x, Java 21, and enterprise-grade patterns**
+
+*Ready for technical interviews · Production-ready architecture · Fully documented*
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=100&section=footer" width="100%"/>
+
+</div>
