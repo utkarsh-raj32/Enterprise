@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -51,9 +51,9 @@
          ===================================================== -->
     <dependencies>
 
-        <!-- -------------------------------------------------
+        <!-- ===
              SPRING BOOT STARTERS
-             ------------------------------------------------- -->
+             === -->
 
         <!-- Spring MVC - provides @RestController, DispatcherServlet,
              HTTP message converters (Jackson for JSON) -->
@@ -90,9 +90,9 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- -------------------------------------------------
+        <!-- ===
              DATABASE
-             ------------------------------------------------- -->
+             === -->
 
         <!-- PostgreSQL JDBC driver - connects Hibernate/JPA to PostgreSQL -->
         <dependency>
@@ -101,11 +101,11 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- -------------------------------------------------
+        <!-- ===
              JWT - JSON Web Token support
              Using JJWT (io.jsonwebtoken) which is the most popular
              Java JWT library - supports HS256, RS256 algorithms
-             ------------------------------------------------- -->
+             === -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -124,30 +124,30 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- -------------------------------------------------
+        <!-- ===
              SWAGGER / OPENAPI
              springdoc-openapi integrates with Spring MVC and generates
              OpenAPI 3 spec + Swagger UI automatically from annotations
-             ------------------------------------------------- -->
+             === -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
 
-        <!-- -------------------------------------------------
+        <!-- ===
              LOMBOK - Reduces boilerplate: generates getters, setters,
              constructors, builders, toString, equals, hashCode at compile time
-             ------------------------------------------------- -->
+             === -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- -------------------------------------------------
+        <!-- ===
              TESTING
-             ------------------------------------------------- -->
+             === -->
 
         <!-- Spring Boot Test - includes JUnit 5, Mockito, AssertJ,
              Spring TestContext Framework, MockMvc -->
