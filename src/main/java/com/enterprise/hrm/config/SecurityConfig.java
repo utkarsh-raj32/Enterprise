@@ -218,7 +218,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000", "https://enterprise-frontend.vercel.app")); // Add your frontend domains
+        // Use patterns to allow any localhost port and any vercel app deployment URL
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:*", "https://*.vercel.app")); 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setAllowCredentials(true);
